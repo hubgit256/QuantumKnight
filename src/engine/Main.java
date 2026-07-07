@@ -22,7 +22,7 @@ public class Main {
         board.printBoard();
         
         // Make move: g1f3
-        Move g1f3 = new Move(6, 18, Bitboard.WHITE_KNIGHT, Bitboard.EMPTY);
+        Move g1f3 = new Move(6, 21, Bitboard.WHITE_KNIGHT, Bitboard.EMPTY);
         System.out.println("\nPlaying: " + g1f3);
         board.makeMove(g1f3);
         board.printBoard();
