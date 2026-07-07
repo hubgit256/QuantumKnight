@@ -26,5 +26,17 @@ public class Main {
         System.out.println("\nPlaying: " + g1f3);
         board.makeMove(g1f3);
         board.printBoard();
+
+        //make move: b8c6
+        Move b8c6 = new Move(57, 42, Bitboard.BLACK_KNIGHT, Bitboard.EMPTY);
+        System.out.println("\nPlaying: " + b8c6);
+        board.makeMove(b8c6);
+        board.printBoard();
+
+        //make move: Nxe5
+        Move Nxe5 = new Move(21, 36, Bitboard.WHITE_KNIGHT, Bitboard.BLACK_PAWN);
+        System.out.println("\nPlaying: " + Nxe5);
+        board.makeMove(Nxe5);
+        board.printBoard();
     }
 }
