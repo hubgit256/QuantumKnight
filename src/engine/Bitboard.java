@@ -1,36 +1,54 @@
 package engine;
 
 public class Bitboard {
+    // ===== PIECE BITBOARDS =====
     long whitePawns, whiteKnights, whiteBishops, whiteRooks, whiteQueens, whiteKing;
     long blackPawns, blackKnights, blackBishops, blackRooks, blackQueens, blackKing;
     long whitePieces, blackPieces, allPieces, emptySquares;
     
+    // ===== GAME STATE =====
     boolean whiteToMove = true;
     
+    // ===== CONSTANTS =====
+    public static final int EMPTY = 0;
+    public static final int WHITE_PAWN = 1;
+    public static final int WHITE_KNIGHT = 2;
+    public static final int WHITE_BISHOP = 3;
+    public static final int WHITE_ROOK = 4;
+    public static final int WHITE_QUEEN = 5;
+    public static final int WHITE_KING = 6;
+    public static final int BLACK_PAWN = 7;
+    public static final int BLACK_KNIGHT = 8;
+    public static final int BLACK_BISHOP = 9;
+    public static final int BLACK_ROOK = 10;
+    public static final int BLACK_QUEEN = 11;
+    public static final int BLACK_KING = 12;
+    
+    // ===== CONSTRUCTOR =====
     public Bitboard() {
         setupStartPosition();
     }
     
+    // ===== SETUP =====
     public void setupStartPosition() {
-        // White: rank 1 = bits 0-7, rank 2 = bits 8-15
-        whitePawns   = 0xFF00L;                    // rank 2: bits 8-15
-        whiteRooks   = (1L << 0) | (1L << 7);      // a1, h1
-        whiteKnights = (1L << 1) | (1L << 6);      // b1, g1
-        whiteBishops = (1L << 2) | (1L << 5);      // c1, f1
-        whiteQueens  = (1L << 3);                   // d1
-        whiteKing    = (1L << 4);                   // e1
+        whitePawns   = 0xFF00L;
+        whiteKnights = (1L << 1) | (1L << 6);
+        whiteBishops = (1L << 2) | (1L << 5);
+        whiteRooks   = (1L << 0) | (1L << 7);
+        whiteQueens  = (1L << 3);
+        whiteKing    = (1L << 4);
         
-        // Black: rank 7 = bits 48-55, rank 8 = bits 56-63
-        blackPawns   = 0xFF000000000000L;           // rank 7: bits 48-55
-        blackRooks   = (1L << 56) | (1L << 63);    // a8, h8
-        blackKnights = (1L << 57) | (1L << 62);    // b8, g8
-        blackBishops = (1L << 58) | (1L << 61);    // c8, f8
-        blackQueens  = (1L << 59);                  // d8
-        blackKing    = (1L << 60);                  // e8
+        blackPawns   = 0xFF000000000000L;
+        blackKnights = (1L << 57) | (1L << 62);
+        blackBishops = (1L << 58) | (1L << 61);
+        blackRooks   = (1L << 56) | (1L << 63);
+        blackQueens  = (1L << 59);
+        blackKing    = (1L << 60);
         
         updateAll();
     }
     
+    // ===== UPDATE COMBINED BITBOARDS =====
     public void updateAll() {
         whitePieces = whitePawns | whiteKnights | whiteBishops | whiteRooks | whiteQueens | whiteKing;
         blackPieces = blackPawns | blackKnights | blackBishops | blackRooks | blackQueens | blackKing;
@@ -38,6 +56,52 @@ public class Bitboard {
         emptySquares = ~allPieces;
     }
     
+    // ===== MAKE MOVE =====
+    public void makeMove(Move move) {
+        long fromMask = 1L << move.fromSquare;
+        long toMask = 1L << move.toSquare;
+        long combinedMask = fromMask | toMask;
+        
+        // Move the piece (XOR removes from 'from', adds to 'to')
+        switch (move.pieceType) {
+            case WHITE_PAWN:   whitePawns   ^= combinedMask; break;
+            case WHITE_KNIGHT: whiteKnights ^= combinedMask; break;
+            case WHITE_BISHOP: whiteBishops ^= combinedMask; break;
+            case WHITE_ROOK:   whiteRooks   ^= combinedMask; break;
+            case WHITE_QUEEN:  whiteQueens  ^= combinedMask; break;
+            case WHITE_KING:   whiteKing    ^= combinedMask; break;
+            case BLACK_PAWN:   blackPawns   ^= combinedMask; break;
+            case BLACK_KNIGHT: blackKnights ^= combinedMask; break;
+            case BLACK_BISHOP: blackBishops ^= combinedMask; break;
+            case BLACK_ROOK:   blackRooks   ^= combinedMask; break;
+            case BLACK_QUEEN:  blackQueens  ^= combinedMask; break;
+            case BLACK_KING:   blackKing    ^= combinedMask; break;
+        }
+        
+        // Remove captured piece if any
+        if (move.capturedPiece != EMPTY) {
+            long captureMask = 1L << move.toSquare;
+            switch (move.capturedPiece) {
+                case WHITE_PAWN:   whitePawns   ^= captureMask; break;
+                case WHITE_KNIGHT: whiteKnights ^= captureMask; break;
+                case WHITE_BISHOP: whiteBishops ^= captureMask; break;
+                case WHITE_ROOK:   whiteRooks   ^= captureMask; break;
+                case WHITE_QUEEN:  whiteQueens  ^= captureMask; break;
+                case WHITE_KING:   whiteKing    ^= captureMask; break;
+                case BLACK_PAWN:   blackPawns   ^= captureMask; break;
+                case BLACK_KNIGHT: blackKnights ^= captureMask; break;
+                case BLACK_BISHOP: blackBishops ^= captureMask; break;
+                case BLACK_ROOK:   blackRooks   ^= captureMask; break;
+                case BLACK_QUEEN:  blackQueens  ^= captureMask; break;
+                case BLACK_KING:   blackKing    ^= captureMask; break;
+            }
+        }
+        
+        whiteToMove = !whiteToMove;
+        updateAll();
+    }
+    
+    // ===== DISPLAY =====
     public char getPiece(int square) {
         long mask = 1L << square;
         if ((whitePawns & mask) != 0) return 'P';
