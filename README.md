@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+# Quantum-Kinight
+>>>>>>> origin/main
 # ♟️ QuantumKnight
 
 A high-performance chess engine built in Java from scratch using **Bitboards**.
@@ -49,4 +53,8 @@ QuantumKnight/
 
 ## Goal
 
+<<<<<<< HEAD
 Build a strong, efficient, and fully documented Java chess engine while understanding every algorithm from first principles.
+=======
+Build a strong, efficient, and fully documented Java chess engine while understanding every algorithm from first principles.
+>>>>>>> origin/main
