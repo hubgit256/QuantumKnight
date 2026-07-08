@@ -57,13 +57,17 @@ public class Bitboard {
     }
     
     // ===== MAKE MOVE =====
-    public void makeMove(Move move) {
-        long fromMask = 1L << move.fromSquare;
-        long toMask = 1L << move.toSquare;
+    public void makeMove(int move) {
+        int fromSquare = Move.getFrom(move);
+        int toSquare = Move.getTo(move);
+        int pieceType = Move.getPiece(move);
+        int capturedPiece = Move.getCaptured(move);
+        
+        long fromMask = 1L << fromSquare;
+        long toMask = 1L << toSquare;
         long combinedMask = fromMask | toMask;
         
-        // Move the piece (XOR removes from 'from', adds to 'to')
-        switch (move.pieceType) {
+        switch (pieceType) {
             case WHITE_PAWN:   whitePawns   ^= combinedMask; break;
             case WHITE_KNIGHT: whiteKnights ^= combinedMask; break;
             case WHITE_BISHOP: whiteBishops ^= combinedMask; break;
@@ -78,10 +82,9 @@ public class Bitboard {
             case BLACK_KING:   blackKing    ^= combinedMask; break;
         }
         
-        // Remove captured piece if any
-        if (move.capturedPiece != EMPTY) {
-            long captureMask = 1L << move.toSquare;
-            switch (move.capturedPiece) {
+        if (capturedPiece != EMPTY) {
+            long captureMask = 1L << toSquare;
+            switch (capturedPiece) {
                 case WHITE_PAWN:   whitePawns   ^= captureMask; break;
                 case WHITE_KNIGHT: whiteKnights ^= captureMask; break;
                 case WHITE_BISHOP: whiteBishops ^= captureMask; break;
