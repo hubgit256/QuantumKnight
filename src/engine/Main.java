@@ -6,29 +6,26 @@ public class Main {
         System.out.println("  QutanKnight Chess Engine");
         System.out.println("=========================");
         
-        // Test knight from g1 (square 6)
-        // Should show: e2, f3, h3
-        AttackTables.printKnightAttacks(6);
-        
-        // Test knight from e4 (square 28)
-        // Should show: c3, c5, d2, d6, f2, f6, g3, g5
-        AttackTables.printKnightAttacks(28);
-        
-        // Test knight from a1 (square 0) - corner
-        // Should show: b3, c2 only
-        AttackTables.printKnightAttacks(0);
-        
-        // Test king from e1 (square 4)
-        // Should show: d1, d2, e2, f1, f2
-        AttackTables.printKingAttacks(4);
-        
-        // Test white pawn from e4 (square 28)
-        // Should show: d5, f5
-        AttackTables.printWhitePawnAttacks(28);
-        
-        // Show board
-        System.out.println("--- Starting Position ---");
+        // Create a board
         Bitboard board = new Bitboard();
         board.printBoard();
+        
+        // Test bishop attacks from c1 (square 2) — empty board
+        System.out.println("\n--- Bishop from c1 (empty board) ---");
+        AttackTables.printBishopAttacks(2, 0L);
+        
+        // Test bishop attacks from c1 — with pawn on d2 blocking
+        System.out.println("\n--- Bishop from c1 (pawn on d2) ---");
+        long pawnOnD2 = 1L << 11;  // d2 = square 11
+        AttackTables.printBishopAttacks(2, pawnOnD2);
+        
+        // Test rook attacks from a1 — empty board
+        System.out.println("\n--- Rook from a1 (empty board) ---");
+        AttackTables.printRookAttacks(0, 0L);
+        
+        // Test queen attacks from d1 (square 3)
+        System.out.println("\n--- Queen from d1 (empty board) ---");
+        long queenAttacks = AttackTables.getQueenAttacks(3, 0L);
+        AttackTables.printBitboard(queenAttacks);
     }
 }
