@@ -7,7 +7,8 @@ A high-performance chess engine built in Java from scratch using **Bitboards**.
 - ✅ Bitboard representation
 - ✅ Move class
 - ✅ Board initialization
-- 🚧 Move generation
+- ✅ AttackTables
+- ✅ Move generation
 - ⏳ Alpha-Beta Search
 - ⏳ Evaluation Function
 - ⏳ UCI Protocol
