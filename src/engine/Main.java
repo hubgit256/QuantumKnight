@@ -21,5 +21,12 @@ public class Main {
         for (int move : moves2) {
             System.out.println("  " + Move.toString(move));
         }
+        board.makeMove(Move.create(62, 45, Bitboard.BLACK_KNIGHT, Bitboard.EMPTY)); // g8f6
+        board.printBoard();
+        int[] moves3 = MoveGenerator.generateMoves(board);
+        System.out.println("\nWhite's moves after g8f6: " + moves3.length);
+        for (int move : moves3) {
+            System.out.println("  " + Move.toString(move));
+        }
     }
 }
